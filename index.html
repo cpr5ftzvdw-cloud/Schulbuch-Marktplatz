@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schulbuch-Marktplatz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --surface2: #F0EEE9;
+    --border: #E2DED6;
+    --border2: #C8C4BC;
+    --text: #1A1916;
+    --text2: #6B6760;
+    --text3: #A09D99;
+    --accent: #2A5C45;
+    --accent-light: #E1F0EA;
+    --accent-text: #1A3D2D;
+    --danger: #A32D2D;
+    --danger-light: #FCEBEB;
+    --warn: #7A4F0D;
+    --warn-light: #FDF3E3;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .logo i { font-size: 22px; color: var(--accent); }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 3px;
+  }
+
+  .nav-tab {
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-tab.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .nav-tab:hover:not(.active) { color: var(--text); }
+
+  main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .stat-value {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: -1px;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  input[type="text"], input[type="number"], input[type="password"], select, textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    color: var(--text);
+    width: 100%;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(42,92,69,0.08);
+  }
+
+  select { cursor: pointer; }
+
+  button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  button:hover { background: var(--surface2); border-color: var(--border2); }
+  button:active { transform: scale(0.98); }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover { background: #1e4433; border-color: #1e4433; }
+
+  .btn-danger {
+    color: var(--danger);
+    border-color: #F7C1C1;
+    background: var(--danger-light);
+  }
+
+  .btn-danger:hover { background: #F7C1C1; }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .book-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+
+  .book-card:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+  .book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .book-title { font-weight: 600; font-size: 15px; color: var(--text); line-height: 1.3; }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-avail { background: var(--accent-light); color: var(--accent-text); }
+  .badge-out { background: var(--surface2); color: var(--text3); }
+  .badge-reserved { background: var(--warn-light); color: var(--warn); }
+
+  .book-meta { font-size: 13px; color: var(--text2); }
+
+  .book-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .book-price { font-size: 18px; font-weight: 600; font-family: 'DM Mono', monospace; }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text3);
+  }
+
+  .empty-state i { font-size: 40px; display: block; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .error-msg { font-size: 13px; color: var(--danger); margin-top: 6px; display: none; }
+
+  .reservation-list { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .reservation-item { font-size: 12px; color: var(--text2); padding: 2px 0; display: flex; align-items: center; gap: 5px; }
+  .reservation-item i { font-size: 13px; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(2px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    animation: slideUp 0.2s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal h3 { font-size: 16px; margin-bottom: 4px; }
+  .modal p { font-size: 13px; color: var(--text2); margin-bottom: 1rem; }
+  .modal-btns { display: flex; gap: 8px; margin-top: 12px; }
+  .modal-btns button { flex: 1; justify-content: center; }
+
+  .login-wrap { max-width: 360px; margin: 3rem auto; }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--text);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.25s;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .loading {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--text3);
+    font-size: 14px;
+  }
+
+  .loading i { font-size: 28px; display: block; margin-bottom: 8px; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .seller-book-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 10px;
+  }
+
+  .seller-book-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+
+  @media (max-width: 600px) {
+    header { padding: 0 1rem; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stats-grid .stat-card:last-child { grid-column: 1 / -1; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid .full { grid-column: 1; }
+    .books-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <i class="ti ti-books"></i>
+    Schulbuch-Marktplatz
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-buyer" onclick="showView('buyer')">
+      <i class="ti ti-shopping-cart"></i> Bücher kaufen
+    </button>
+    <button class="nav-tab" id="tab-seller" onclick="showView('seller')">
+      <i class="ti ti-lock"></i> Verkäufer
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- KÄUFER -->
+  <div id="view-buyer">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-books"></i> Bücher gesamt</div>
+        <div class="stat-value" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-check"></i> Verfügbar</div>
+        <div class="stat-value" id="stat-avail">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label"><i class="ti ti-bookmark"></i> Reserviert</div>
+        <div class="stat-value" id="stat-res">—</div>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="Buchtitel, Fach oder Verkäufer suchen…" oninput="renderBuyer()" style="flex:1;">
+      <select id="filter-subject" onchange="renderBuyer()" style="width:170px;">
+        <option value="">Alle Fächer</option>
+      </select>
+    </div>
+
+    <div id="loading-buyer" class="loading">
+      <i class="ti ti-loader-2"></i> Bücher werden geladen…
+    </div>
+    <div id="books-grid" class="books-grid"></div>
+    <div id="empty-buyer" class="empty-state" style="display:none;">
+      <i class="ti ti-mood-empty"></i>
+      <p>Noch keine Bücher eingetragen.</p>
+    </div>
+  </div>
+
+  <!-- VERKÄUFER -->
+  <div id="view-seller" style="display:none;">
+
+    <div id="login-wrap" class="login-wrap">
+      <div class="panel">
+        <div style="text-align:center; margin-bottom:1.25rem;">
+          <i class="ti ti-lock" style="font-size:32px; color:var(--accent);"></i>
+          <h2 style="font-size:18px; margin-top:8px;">Verkäufer-Bereich</h2>
+          <p style="font-size:13px; color:var(--text2); margin-top:4px;">Nur für Schüler des abgehenden Jahrgangs</p>
+        </div>
+        <input type="password" id="pw-input" placeholder="Passwort eingeben" style="margin-bottom:10px;" onkeydown="if(event.key==='Enter')checkPw()">
+        <button class="btn-primary" onclick="checkPw()" style="width:100%; justify-content:center;">
+          <i class="ti ti-login"></i> Einloggen
+        </button>
+        <p class="error-msg" id="pw-error" style="display:none;">Falsches Passwort. Bitte erneut versuchen.</p>
+      </div>
+    </div>
+
+    <div id="seller-panel" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <h2 style="font-size:17px; font-weight:600;">Bücher verwalten</h2>
+        <button onclick="logoutSeller()" style="font-size:13px; padding:6px 12px;">
+          <i class="ti ti-logout"></i> Abmelden
+        </button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><i class="ti ti-plus"></i> Neues Buch eintragen</div>
+        <div class="form-grid">
+          <input type="text" id="in-title" placeholder="Buchtitel *" class="full">
+          <input type="text" id="in-subject" placeholder="Fach *">
+          <input type="text" id="in-seller" placeholder="Dein Name *">
+          <input type="number" id="in-price" placeholder="Preis in € *" min="0" step="0.50">
+          <input type="number" id="in-qty" placeholder="Anzahl *" min="1" value="1">
+          <input type="text" id="in-condition" placeholder="Zustand (z.B. gut, leichte Gebrauchsspuren)" class="full">
+          <input type="text" id="in-phone" placeholder="WhatsApp-Nummer * (z.B. 017612345678)" class="full">
+        </div>
+        <button class="btn-primary" onclick="addBook()" style="width:100%; justify-content:center;">
+          <i class="ti ti-plus"></i> Buch hinzufügen
+        </button>
+        <p class="error-msg" id="add-error"></p>
+      </div>
+
+      <div id="loading-seller" class="loading" style="display:none;">
+        <i class="ti ti-loader-2"></i> Laden…
+      </div>
+      <div id="seller-list"></div>
+      <div id="empty-seller" class="empty-state" style="display:none;">
+        <i class="ti ti-books"></i>
+        <p>Noch keine Bücher eingetragen. Füge dein erstes Buch hinzu!</p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- Reservierungs-Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h3 id="modal-title"></h3>
+    <p id="modal-sub"></p>
+    <input type="text" id="modal-name" placeholder="Dein vollständiger Name *">
+    <p class="error-msg" id="modal-error"></p>
+    <div class="modal-btns">
+      <button class="btn-primary" onclick="confirmReserve()">
+        <i class="ti ti-bookmark"></i> Reservieren
+      </button>
+      <button onclick="closeModal()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <i class="ti ti-check"></i>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getFirestore, collection, getDocs, addDoc, deleteDoc, doc,
+    updateDoc, arrayUnion, onSnapshot, serverTimestamp, query, orderBy
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdbwwIknjT19MPlz1O8IAxrZBCiUDgNW8",
+    authDomain: "schulbuch-marktplatz.firebaseapp.com",
+    projectId: "schulbuch-marktplatz",
+    storageBucket: "schulbuch-marktplatz.firebasestorage.app",
+    messagingSenderId: "950899280291",
+    appId: "1:950899280291:web:4c3bd2cc6587126c603216"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const booksCol = collection(db, "books");
+
+  const SELLER_PW = "schule2024";
+  let books = [];
+  let pendingId = null;
+  let sellerLoggedIn = false;
+
+  // Realtime listener
+  const q = query(booksCol, orderBy("createdAt", "desc"));
+  onSnapshot(q, snap => {
+    books = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    document.getElementById("loading-buyer").style.display = "none";
+    renderBuyer();
+    updateStats();
+    updateFilters();
+    if (sellerLoggedIn) renderSeller();
+  });
+
+  // View switching
+  window.showView = function(v) {
+    document.getElementById("view-buyer").style.display = v === "buyer" ? "block" : "none";
+    document.getElementById("view-seller").style.display = v === "seller" ? "block" : "none";
+    document.getElementById("tab-buyer").classList.toggle("active", v === "buyer");
+    document.getElementById("tab-seller").classList.toggle("active", v === "seller");
+  };
+
+  // Password check
+  window.checkPw = function() {
+    const pw = document.getElementById("pw-input").value;
+    if (pw === SELLER_PW) {
+      sellerLoggedIn = true;
+      document.getElementById("login-wrap").style.display = "none";
+      document.getElementById("seller-panel").style.display = "block";
+      renderSeller();
+    } else {
+      const err = document.getElementById("pw-error");
+      err.style.display = "block";
+      err.textContent = "Falsches Passwort. Bitte erneut versuchen.";
+    }
+  };
+
+  window.logoutSeller = function() {
+    sellerLoggedIn = false;
+    document.getElementById("login-wrap").style.display = "block";
+    document.getElementById("seller-panel").style.display = "none";
+    document.getElementById("pw-input").value = "";
+    document.getElementById("pw-error").style.display = "none";
+  };
+
+  // Add book
+  window.addBook = async function() {
+    const title = document.getElementById("in-title").value.trim();
+    const subject = document.getElementById("in-subject").value.trim();
+    const seller = document.getElementById("in-seller").value.trim();
+    const price = parseFloat(document.getElementById("in-price").value);
+    const qty = parseInt(document.getElementById("in-qty").value);
+    const condition = document.getElementById("in-condition").value.trim() || "nicht angegeben";
+    const phone = document.getElementById("in-phone").value.trim().replace(/\s+/g, "");
+    const errEl = document.getElementById("add-error");
+
+    if (!title || !subject || !seller || isNaN(price) || isNaN(qty) || qty < 1 || !phone) {
+      errEl.textContent = "Bitte alle Pflichtfelder (*) ausfüllen.";
+      errEl.style.display = "block";
+      return;
+    }
+    errEl.style.display = "none";
+
+    try {
+      await addDoc(booksCol, {
+        title, subject, seller, phone, price, qty,
+        available: qty, condition,
+        reservations: [],
+        createdAt: serverTimestamp()
+      });
+      ["in-title","in-subject","in-seller","in-phone","in-price","in-condition"].forEach(id => document.getElementById(id).value = "");
+      document.getElementById("in-qty").value = "1";
+      showToast("Buch erfolgreich hinzugefügt!");
+    } catch(e) {
+      errEl.textContent = "Fehler beim Speichern: " + e.message;
+      errEl.style.display = "block";
+    }
+  };
+
+  // Delete book
+  window.deleteBook = async function(id) {
+    if (!confirm("Dieses Buch wirklich löschen?")) return;
+    try {
+      await deleteDoc(doc(db, "books", id));
+      showToast("Buch gelöscht.");
+    } catch(e) { alert("Fehler: " + e.message); }
+  };
+
+  // Reserve modal
+  window.openReserveModal = function(id) {
+    const b = books.find(x => x.id === id);
+    if (!b) return;
+    pendingId = id;
+    document.getElementById("modal-title").textContent = b.title;
+    document.getElementById("modal-sub").textContent = `${b.subject} · ${b.price.toFixed(2)} € · Verkäufer: ${b.seller}`;
+    document.getElementById("modal-name").value = "";
+    document.getElementById("modal-error").style.display = "none";
+    document.getElementById("modal-overlay").classList.add("open");
+  };
+
+  window.closeModal = function() {
+    document.getElementById("modal-overlay").classList.remove("open");
+    pendingId = null;
+  };
+
+  window.confirmReserve = async function() {
+    const name = document.getElementById("modal-name").value.trim();
+    const errEl = document.getElementById("modal-error");
+    if (!name) { errEl.textContent = "Bitte gib deinen Namen ein."; errEl.style.display = "block"; return; }
+    const b = books.find(x => x.id === pendingId);
+    if (!b || b.available < 1) { errEl.textContent = "Leider nicht mehr verfügbar."; errEl.style.display = "block"; return; }
+    errEl.style.display = "none";
+    try {
+      await updateDoc(doc(db, "books", pendingId), {
+        available: b.available - 1,
+        reservations: arrayUnion({ name, date: new Date().toLocaleDateString("de-DE") })
+      });
+      closeModal();
+      showToast(`Reserviert für ${name}!`);
+    } catch(e) { errEl.textContent = "Fehler: " + e.message; errEl.style.display = "block"; }
+  };
+
+  // Render buyer view
+  window.renderBuyer = function() {
+    const search = document.getElementById("search-input").value.toLowerCase();
+    const subj = document.getElementById("filter-subject").value;
+    const filtered = books.filter(b => {
+      const ms = !search || b.title.toLowerCase().includes(search) || b.subject.toLowerCase().includes(search) || b.seller.toLowerCase().includes(search);
+      const mf = !subj || b.subject === subj;
+      return ms && mf;
+    });
+    const grid = document.getElementById("books-grid");
+    const empty = document.getElementById("empty-buyer");
+    if (!filtered.length) { grid.innerHTML = ""; empty.style.display = "block"; return; }
+    empty.style.display = "none";
+    grid.innerHTML = filtered.map(b => {
+      const avail = b.available > 0;
+      const badge = avail
+        ? `<span class="badge badge-avail">${b.available} verfügbar</span>`
+        : `<span class="badge badge-out">Vergeben</span>`;
+      return `
+      <div class="book-card">
+        <div class="book-header">
+          <div class="book-title">${esc(b.title)}</div>
+          ${badge}
+        </div>
+        <div class="book-meta"><i class="ti ti-tag" style="font-size:13px;"></i> ${esc(b.subject)}</div>
+        <div class="book-meta"><i class="ti ti-tool" style="font-size:13px;"></i> Zustand: ${esc(b.condition)}</div>
+        <div class="book-meta"><i class="ti ti-user" style="font-size:13px;"></i> ${esc(b.seller)}</div>
+        <div class="book-footer">
+          <span class="book-price">${b.price.toFixed(2)} €</span>
+          <div style="display:flex; gap:6px; align-items:center;">
+            ${b.phone ? `<a href="https://wa.me/${waNumber(b.phone)}?text=${encodeURIComponent('Hallo, ich interessiere mich für dein Buch: ' + b.title)}" target="_blank" style="display:inline-flex; align-items:center; gap:5px; padding:7px 12px; font-size:13px; font-weight:500; background:#25D366; color:#fff; border-radius:var(--radius); text-decoration:none; border:none;"><i class="ti ti-brand-whatsapp" style="font-size:15px;"></i> Kontakt</a>` : ""}
+            ${avail
+              ? `<button class="btn-primary" onclick="openReserveModal('${b.id}')"><i class="ti ti-bookmark"></i> Reservieren</button>`
+              : `<span style="font-size:12px; color:var(--text3);">Nicht verfügbar</span>`}
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+  };
+
+  // Render seller view
+  function renderSeller() {
+    const list = document.getElementById("seller-list");
+    const empty = document.getElementById("empty-seller");
+    if (!books.length) { list.innerHTML = ""; empty.style.display = "block"; return; }
+    empty.style.display = "none";
+    list.innerHTML = books.map(b => `
+      <div class="seller-book-card">
+        <div class="seller-book-header">
+          <div>
+            <div style="font-weight:600; font-size:15px;">${esc(b.title)}</div>
+            <div class="book-meta" style="margin-top:3px;">${esc(b.subject)} · ${b.price.toFixed(2)} € · ${esc(b.condition)}</div>
+            <div class="book-meta">Verkäufer: ${esc(b.seller)} · <strong>${b.available}</strong> von ${b.qty} verfügbar</div>
+            ${b.phone ? `<div class="book-meta"><i class="ti ti-brand-whatsapp" style="font-size:13px; color:#25D366;"></i> ${esc(b.phone)}</div>` : ""}
+          </div>
+          <button class="btn-danger" onclick="deleteBook('${b.id}')" title="Löschen">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+        ${b.reservations && b.reservations.length ? `
+          <div class="reservation-list">
+            <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:4px;">Reservierungen:</div>
+            ${b.reservations.map(r => `
+              <div class="reservation-item">
+                <i class="ti ti-user-check"></i>
+                ${esc(r.name)} <span style="color:var(--text3); margin-left:4px;">${r.date}</span>
+              </div>`).join("")}
+          </div>` : ""}
+      </div>`).join("");
+  }
+
+  function updateStats() {
+    document.getElementById("stat-total").textContent = books.length;
+    document.getElementById("stat-avail").textContent = books.filter(b => b.available > 0).length;
+    document.getElementById("stat-res").textContent = books.reduce((s, b) => s + (b.reservations ? b.reservations.length : 0), 0);
+  }
+
+  function updateFilters() {
+    const sel = document.getElementById("filter-subject");
+    const curr = sel.value;
+    const subjects = [...new Set(books.map(b => b.subject))].sort();
+    sel.innerHTML = '<option value="">Alle Fächer</option>' + subjects.map(s => `<option value="${s}"${s === curr ? " selected" : ""}>${s}</option>`).join("");
+  }
+
+  function esc(str) {
+    return String(str || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function waNumber(num) {
+    // Normalize German number: 0176... → 49176...
+    let n = String(num).replace(/\D/g, "");
+    if (n.startsWith("00")) n = n.slice(2);
+    else if (n.startsWith("0")) n = "49" + n.slice(1);
+    return n;
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    document.getElementById("toast-msg").textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 3000);
+  }
+
+  // Close modal on overlay click
+  document.getElementById("modal-overlay").addEventListener("click", function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>
