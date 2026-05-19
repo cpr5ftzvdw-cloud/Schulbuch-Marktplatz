@@ -721,11 +721,26 @@
               <div class="reservation-item">
                 <i class="ti ti-user-check"></i>
                 ${esc(r.name)} <span style="color:var(--text3); margin-left:4px;">${r.date}</span>
+                <button onclick="removeReservation('${b.id}', '${r.name.replace(/'/g,"\\'")}', '${r.date}')" style="margin-left:8px; padding:2px 8px; font-size:11px; color:var(--danger); border-color:#F7C1C1; background:var(--danger-light);">
+                <i class="ti ti-x"></i>
+</button>
               </div>`).join("")}
           </div>` : ""}
       </div>`).join("");
   }
-
+window.removeReservation = async function(bookId, reservationName, reservationDate) {
+  if (!confirm(`Reservierung von "${reservationName}" wirklich löschen?`)) return;
+  const b = books.find(x => x.id === bookId);
+  if (!b) return;
+  const updated = b.reservations.filter(r => !(r.name === reservationName && r.date === reservationDate));
+  try {
+    await updateDoc(doc(db, "books", bookId), {
+      available: b.available + 1,
+      reservations: updated
+    });
+    showToast(`Reservierung von ${reservationName} gelöscht.`);
+  } catch(e) { alert("Fehler: " + e.message); }
+};
   function updateStats() {
     document.getElementById("stat-total").textContent = books.length;
     document.getElementById("stat-avail").textContent = books.filter(b => b.available > 0).length;
